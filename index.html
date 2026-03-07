@@ -855,7 +855,9 @@ function renderPaperList() {
     el.innerHTML = '<div class="empty-folder-hint">まだ論文がありません。<br>「＋ 論文を追加」から追加してください。</div>';
     return;
   }
-  el.innerHTML = list.map((p, i) => {
+  // お気に入りを上に表示（元のインデックス i はそのまま渡して選択・削除・お気に入り切り替えに使用）
+  const sorted = list.map((p, i) => ({ p, i })).sort((a, b) => (b.p.favorite ? 1 : 0) - (a.p.favorite ? 1 : 0));
+  el.innerHTML = sorted.map(({ p, i }) => {
     const active = selectedPaper === i ? 'active' : '';
     const favOn = p.favorite ? ' fav-on' : '';
     return `<div class="paper-card ${active}" onclick="selectPaper(${i})">
